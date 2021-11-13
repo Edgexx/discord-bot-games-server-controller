@@ -1,0 +1,14 @@
+{
+  "name": "mc-server-bot",
+  "version": "1.0.0",
+  "description": "Discord bot to control the Minecraft Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shay Buttaccio",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.3.1"
+  }
+}

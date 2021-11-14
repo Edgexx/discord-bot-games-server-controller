@@ -15,11 +15,11 @@ module.exports = {
 		doClient.droplets.get(process.env.DROPLET_ID,  function(err, droplet) {
 			console.log(err); // null on success
 			console.log(droplet.status); //
-			var status = ":red_circle:";
+			var statusIcon = ":red_circle:";
 			if (droplet.status === "active") {
-				status = ":green_circle:";
+				statusIcon = ":green_circle:";
 			}
-			interaction.reply(`The VPS current status:  ${droplet.status}  ${status}`);
+			interaction.reply(`The VPS current status:  ${droplet.status}  ${statusIcon}   IP Address: **${droplet.networks.v4[0].ip_address}**`);
 		});
 	},
 };

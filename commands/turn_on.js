@@ -15,7 +15,11 @@ module.exports = {
 		doClient.droplets.powerOn(process.env.DROPLET_ID, function(err, powerOn) {
 			console.log(err); // null on success
 			console.log(powerOn); //
+			if (powerOn.status == 'in-progress') {
+				doClient.droplets.get(process.env.DROPLET_ID,  function(err, droplet) {
+					interaction.reply(`The VPS is starting up!  :green_circle:  IP Address: **${droplet.networks.v4[0].ip_address}**`);
+				});
+			}
 		});
-		interaction.reply("The VPS is starting up!  :green_circle:");
 	},
 };

@@ -1,26 +1,42 @@
-const Discord = require("discord.js");
-const config = require("./config.json");
-const { Client, Intents } = require('discord.js');
+// Require the necessary discord.js classes
+const fs = require('fs');
+const { Client, Collection, Intents } = require('discord.js');
+const { token } = require('./config.json');
+const dotenv = require('dotenv');
 
-const myIntents = new Intents();
-myIntents.add(Intents.FLAGS.GUILD_MESSAGES);
+dotenv.config();
 
-const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES] });
-const prefix = "!";
+// Create a new client instance
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES] });
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-client.on("message", function(message){
-	if(message.author.bot) return;
-	if(!message.content.startsWith(prefix)) return;
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	// Set a new item in the Collection
+	// With the key as the command name and the value as the exported module
+	client.commands.set(command.data.name, command);
+}
 
-	const commandBody = message.content.slice(prefix.length);
-  const args = commandBody.split(' ');
-  const command = args.shift().toLowerCase();
-
-  if (command === "ping") {
-    const timeTaken = Date.now() - message.createdTimestamp;
-    message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
-  }
-  
+// When the client is ready, run this code (only once)
+client.once('ready', () => {
+	console.log('Ready!');
 });
 
-client.login(config.BOT_TOKEN);
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	const command = client.commands.get(interaction.commandName);
+
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
+
+// Login to Discord with your client's token
+client.login(token);

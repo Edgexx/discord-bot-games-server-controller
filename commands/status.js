@@ -35,7 +35,7 @@ module.exports = {
 		}).then(function(){
 			if (existingDropletFound == false){
 				console.log("No existing droplets found.. Exiting command..")
-				interaction.editReply("No existing VPS :x:");
+				interaction.editReply("The VPS current status:  Offline  :red_circle:");
 				return;
 			}
 
@@ -44,12 +44,11 @@ module.exports = {
 			doClient.droplets.get(dropletID,  function(err, droplet) {
 				if(err != null){
 					console.log(err);
+					return;
 				}
-				var statusIcon = ":red_circle:";
 				if (droplet.status === "active") {
-					statusIcon = ":green_circle:";
+					interaction.reply(`The VPS current status:  Active  :green_circle:  IP Address: **${process.env.FLOATING_IP}**`);
 				}
-				interaction.reply(`The VPS current status:  ${droplet.status}  ${statusIcon}   IP Address: **${droplet.networks.v4[0].ip_address}**`);
 			});
 		});
 	},

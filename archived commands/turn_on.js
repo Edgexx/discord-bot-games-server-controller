@@ -19,7 +19,7 @@ module.exports = {
 				doClient.droplets.get(process.env.DROPLET_ID,  function(err, droplet) {
 					interaction.reply(`The VPS is starting up!  :green_circle:  IP Address: **${droplet.networks.v4[0].ip_address}**`);
 				});
-			}
+			}			
 		});
 	},
 };

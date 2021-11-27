@@ -11,6 +11,12 @@ module.exports = {
 		.setName('mc-server-off')
 		.setDescription('Auto-saves, then turns OFF the virtual server.'),
 	async execute(interaction) {
+		
+		// Get all droplets
+		// Find correct droplet by "name"
+		// Shutdown droplet
+		// Create an image of the droplet, using specific name
+
 		var doClient = digitalocean.client(process.env.DO_TOKEN);
 		doClient.droplets.shutdown(process.env.DROPLET_ID, function(err, shutdown) {
 			console.log(err); // null on success

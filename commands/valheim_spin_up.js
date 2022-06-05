@@ -98,12 +98,20 @@ module.exports = {
 				}
 			} while (notActive);
 
-			interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.success}\n${status_spinningUp} ${controller.icons.success}\n${status_assignFloatingIp} ${controller.icons.loading}`);
 
-			// Assign floating IP address to droplets
+
+			// Assign floating IP address to droplets [[SKIPPING THIS FOR NOW.. SEEMS TO BE ISSUES CONNECTING TO VALHEIM SERVER WITH FLOATING IP]]
+			/*interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.success}\n${status_spinningUp} ${controller.icons.success}\n${status_assignFloatingIp} ${controller.icons.loading}`);
 			const assigned = await controller.AssignFloatingIp(process.env.VALHEIM_FLOATING_IP, newDroplet["id"]);
 
-			var ipAddress = assigned ? process.env.VALHEIM_FLOATING_IP : newDroplet["networks"]["v4"][1]["ip_address"];
+			var ipAddress = assigned ? process.env.VALHEIM_FLOATING_IP : newDroplet["networks"]["v4"][1]["ip_address"];*/
+
+			const ipv40 = newDroplet["networks"]["v4"][0]["ip_address"];
+			const ipv41 = newDroplet["networks"]["v4"][1]["ip_address"];
+			var ipAddress = ipv40;
+			if(newDroplet["networks"]["v4"][0]["type"] != "public"){
+				ipAddress = ipv41;
+			}
 
 			sleep(3000).then(() => {
 				interaction.editReply(`Valheim VPS spin up complete! ${controller.icons.success} Valheim server should be available soon via IP Address: **${ipAddress}:2456**\nFor easy connection, right-click game in Steam > Properties and add to \"Launch Options\" \`+connect ${ipAddress}:2456\``);

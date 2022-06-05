@@ -19,10 +19,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Edgexx/db-minecraft-server-controller.git"
+    "url": "git+https://github.com/Edgexx/discord-bot-games-server-controller.git"
   },
   "bugs": {
-    "url": "https://github.com/Edgexx/db-minecraft-server-controller/issues"
+    "url": "https://github.com/Edgexx/discord-bot-games-server-controller/issues"
   },
-  "homepage": "https://github.com/Edgexx/db-minecraft-server-controller#readme"
+  "homepage": "https://github.com/Edgexx/discord-bot-games-server-controller#readme"
 }

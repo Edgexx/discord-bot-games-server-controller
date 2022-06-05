@@ -11,18 +11,18 @@ dotenv.config();
 module.exports = {
 
 	data: new SlashCommandBuilder()
-		.setName('mc-shutdown')
-		.setDescription('Shutdown, archive, and delete the virtual private sever for Minecraft. (Est. ~10mins)'),
+		.setName('valheim-shutdown')
+		.setDescription('Shutdown, archive, and delete the virtual private sever for Valheim. (Est. ~10mins)'),
 
 	async execute(interaction) {
 
 		console.log("Received command to spin down VPS..");
 
-		const status_findingVps = "Finding VPS...";
-		const status_vpsStatus = "VPS Status...";
-		const status_shuttingDown = "Shutting down VPS...";
-		const status_creatingSnapshot = "Creating a snapshot (~10mins)...";
-		const status_deleteDroplet = "Deleting VPS..."
+		const status_findingVps = "Finding Valheim VPS...";
+		const status_vpsStatus = "Valheim VPS Status...";
+		const status_shuttingDown = "Shutting down Valheim VPS...";
+		const status_creatingSnapshot = "Creating a snapshot of the server (~10mins)...";
+		const status_deleteDroplet = "Deleting Valheim VPS...";
 
 		interaction.deferReply({ ephemeral: true }).then(
 			function(){
@@ -30,7 +30,7 @@ module.exports = {
 			}
 		);
 
-		const droplet = await controller.GetDroplet(process.env.MC_SNAPSHOT_NAME);
+		const droplet = await controller.GetDroplet(process.env.VALHEIM_SNAPSHOT_NAME);
 
 		if (droplet == null) {
 			console.log("No droplet found. Exiting command!");
@@ -52,7 +52,7 @@ module.exports = {
 
 		//create snapshot
 		interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_shuttingDown} ${controller.icons.success}\n${status_creatingSnapshot} ${controller.icons.loading}`);
-		const newSnapshot = await controller.CreateSnapshot(droplet["id"], process.env.MC_SNAPSHOT_NAME);
+		const newSnapshot = await controller.CreateSnapshot(droplet["id"], process.env.VALHEIM_SNAPSHOT_NAME);
 
 		//wait 5mins, then check every 20secs if snapshot is There
 		console.log("Sleeping for 5mins...");
@@ -61,7 +61,7 @@ module.exports = {
 		var noSnapshot = true;
 		var totalWaitTime = 300000;
 		do {
-			const snapshot = controller.GetSnapshot(process.env.MC_SNAPSHOT_NAME);
+			const snapshot = controller.GetSnapshot(process.env.VALHEIM_SNAPSHOT_NAME);
 
 			if(snapshot != null){
 				noSnapshot = false;

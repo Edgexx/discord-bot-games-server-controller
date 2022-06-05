@@ -18,11 +18,11 @@ module.exports = {
 
 		console.log("Received command to spin up VPS..");
 
-		const status_findingVps = "Finding VPS...";
-		const status_vpsStatus = "VPS Status...";
-		const status_findingSnapshot = "Finding Snapshot...";
-		const status_spinningUp = "Spinning up VPS (~2mins)...";
-		const status_assignFloatingIp = "Assiging Floating IP...";
+		const status_findingVps = "Finding Minecraft VPS...";
+		const status_vpsStatus = "Minecraft VPS Status...";
+		const status_findingSnapshot = "Finding Minecraft server snapshot...";
+		const status_spinningUp = "Spinning up Minecraft VPS (~2mins)...";
+		const status_assignFloatingIp = "Attempting to assign Floating IP...";
 
 
 		interaction.deferReply({ ephemeral: true }).then(
@@ -35,25 +35,29 @@ module.exports = {
 
 		if (droplet != null) {
 			console.log("Existing droplet found. Exiting command!");
-			interaction.editReply(`${status_vpsStatus} ${controller.icons.online}`);
+
+			const ipv40 = droplet["networks"]["v4"][0]["ip_address"];
+			const ipv41 = droplet["networks"]["v4"][1]["ip_address"];
+			var ipAddress = ipv40;
+			if(droplet["networks"]["v4"][0]["type"] != "public"){
+				ipAddress = ipv41;
+			}
+
+			interaction.editReply(`Minecraft VPS is already online! ${controller.icons.online} via IP Address: **${ipAddress}**`);
 			return;
 		}
 
-		interaction.editReply(`${status_findingVps} ${controller.icons.success}\n
-			${status_findingSnapshot} ${controller.icons.loading}`);
+		interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.loading}`);
 
 		const snapshot = await controller.GetSnapshot(process.env.MC_SNAPSHOT_NAME);
 
 		if (snapshot == null) {
 			console.log("Could not find snapshot. Exiting command!");
-			interaction.editReply(`${status_findingVps} ${controller.icons.success}\n
-				${status_findingSnapshot} ${controller.icons.warning}`);
+			interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.warning}`);
 			return;
 		}
 
-		interaction.editReply(`${status_findingVps} ${controller.icons.success}\n
-			${status_findingSnapshot} ${controller.icons.success}\n
-			${status_spinningUp} ${controller.icons.loading}`);
+		interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.success}\n${status_spinningUp} ${controller.icons.loading}`);
 
 			// Create new droplet from image
 			var dropletOptions = {
@@ -70,9 +74,7 @@ module.exports = {
 
 			if(newDroplet == null){
 				console.log(err);
-				interaction.editReply(`${status_findingVps} ${controller.icons.success}\n
-					${status_findingSnapshot} ${controller.icons.success}\n
-					${status_spinningUp} ${controller.icons.warning}`);
+				interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.success}\n${status_spinningUp} ${controller.icons.warning}`);
 				return;
 			}
 
@@ -94,10 +96,7 @@ module.exports = {
 				}
 			} while (notActive);
 
-			interaction.editReply(`${status_findingVps} ${controller.icons.success}\n
-				${status_findingSnapshot} ${controller.icons.success}\n
-				${status_spinningUp} ${controller.icons.success}\n
-				${status_assignFloatingIp} ${controller.loading}`);
+			interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.success}\n${status_spinningUp} ${controller.icons.success}\n${status_assignFloatingIp} ${controller.icons.loading}`);
 
 			// Assign floating IP address to droplets
 			const assigned = await controller.AssignFloatingIp(process.env.MC_FLOATING_IP, newDroplet["id"]);
@@ -105,7 +104,7 @@ module.exports = {
 			var ipAddress = assigned ? process.env.MC_FLOATING_IP : newDroplet["ip"];
 
 			sleep(3000).then(() => {
-				interaction.editReply(`VPS spin up complete. ${controller.icons.success} Minecraft Server should be available soon via IP Address: **${ipAddress}**`);
+				interaction.editReply(`Minecraft VPS spin up complete! ${controller.icons.success} Minecraft Server should be available soon via IP Address: **${ipAddress}**`);
 			});
 
 			// Delete the image (new one will be created when spinning down)

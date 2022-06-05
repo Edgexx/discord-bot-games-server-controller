@@ -1,1 +1,1 @@
-# db-minecraft-server-controller
+# discord-bot-games-server-controller

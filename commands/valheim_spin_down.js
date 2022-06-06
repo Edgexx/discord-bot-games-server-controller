@@ -61,7 +61,7 @@ module.exports = {
 		var noSnapshot = true;
 		var totalWaitTime = 300000;
 		do {
-			const snapshot = controller.GetSnapshot(process.env.VALHEIM_SNAPSHOT_NAME);
+			const snapshot = await controller.GetSnapshot(process.env.VALHEIM_SNAPSHOT_NAME);
 
 			if(snapshot != null){
 				noSnapshot = false;

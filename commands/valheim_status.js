@@ -36,6 +36,8 @@ module.exports = {
 		var status = (droplet.status == 'active');
 		status = status ? controller.icons.online : controller.icons.offline;
 
-		interaction.editReply(`${status_searching} ${controller.icons.success}\n${status_vpsStatus} ${status}`);
+		const ipAddress = controller.GetPublicIp(droplet);
+
+		interaction.editReply(`${status_searching} ${controller.icons.success}\n${status_vpsStatus} ${status}\nIP Address: **${ipAddress}:2456**\nPassword: **${process.env.VALHEIM_SERVER_PASSWORD}**`);
 	},
 };

@@ -83,9 +83,10 @@ module.exports = {
 			await sleep(30000);
 			var notActive = true;
 			var totalWaitTime = 30000;
+			var activeDroplet;
 			do {
-				const droplet = await controller.GetDroplet(newDroplet["name"]);
-				if(droplet["status"] == "active"){
+				activeDroplet = await controller.GetDroplet(newDroplet["name"]);
+				if(activeDroplet["status"] == "active"){
 					notActive = false;
 					console.log("Droplet active!");
 				}
@@ -101,7 +102,9 @@ module.exports = {
 			// Assign floating IP address to droplets
 			const assigned = await controller.AssignFloatingIp(process.env.MC_FLOATING_IP, newDroplet["id"]);
 
-			var ipAddress = assigned ? process.env.MC_FLOATING_IP : newDroplet["ip"];
+			const publicIpv4 = controller.GetPublicIp(activeDroplet);
+
+			var ipAddress = assigned ? process.env.MC_FLOATING_IP : publicIpv4;
 
 			sleep(3000).then(() => {
 				interaction.editReply(`Minecraft VPS spin up complete! ${controller.icons.success} Minecraft Server should be available soon via IP Address: **${ipAddress}**`);

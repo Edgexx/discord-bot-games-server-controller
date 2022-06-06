@@ -85,9 +85,10 @@ module.exports = {
 			await sleep(30000);
 			var notActive = true;
 			var totalWaitTime = 30000;
+			var activeDroplet;
 			do {
-				const droplet = await controller.GetDroplet(newDroplet["name"]);
-				if(droplet["status"] == "active"){
+				activeDroplet = await controller.GetDroplet(newDroplet["name"]);
+				if(activeDroplet["status"] == "active"){
 					notActive = false;
 					console.log("Droplet active!");
 				}
@@ -102,24 +103,15 @@ module.exports = {
 			/*interaction.editReply(`${status_findingVps} ${controller.icons.success}\n${status_findingSnapshot} ${controller.icons.success}\n${status_spinningUp} ${controller.icons.success}\n${status_assignFloatingIp} ${controller.icons.loading}`);
 			const assigned = await controller.AssignFloatingIp(process.env.VALHEIM_FLOATING_IP, newDroplet["id"]);
 
-			const ipv40 = newDroplet["networks"]["v4"][0]["ip_address"];
-			const ipv41 = newDroplet["networks"]["v4"][1]["ip_address"];
-			var ipAddress = ipv40;
-			if(newDroplet["networks"]["v4"][0]["type"] != "public"){
-				ipAddress = ipv41;
-			}
+			const publicIpv4 = controller.GetPublicIp(activeDroplet);
 
-			ipAddress = assigned ? process.env.VALHEIM_FLOATING_IP : ipAddress;*/
+			ipAddress = assigned ? process.env.VALHEIM_FLOATING_IP : publicIpv4;*/
 
-			const ipv40 = newDroplet["networks"]["v4"][0]["ip_address"];
-			const ipv41 = newDroplet["networks"]["v4"][1]["ip_address"];
-			var ipAddress = ipv40;
-			if(newDroplet["networks"]["v4"][0]["type"] != "public"){
-				ipAddress = ipv41;
-			}
+			ipAddress = controller.GetPublicIp(activeDroplet);
 
 			sleep(3000).then(() => {
-				interaction.editReply(`Valheim VPS spin up complete! ${controller.icons.success} Valheim server should be available soon via IP Address: **${ipAddress}:2456**\nFor easy connection, right-click game in Steam > Properties and add to \"Launch Options\" \`+connect ${ipAddress}:2456\``);
+				interaction.editReply(`Valheim VPS spin up complete! ${controller.icons.success} Valheim server should be available soon via IP Address: **${ipAddress}:2456**\nPassword: **${process.env.VALHEIM_SERVER_PASSWORD}**`);
+				//\nFor easy connection, right-click game in Steam > Properties and add to \"Launch Options\" \`+connect ${ipAddress}:2456\`
 			});
 
 			// Delete the image (new one will be created when spinning down)

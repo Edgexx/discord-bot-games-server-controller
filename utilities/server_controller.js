@@ -36,7 +36,7 @@ module.exports = {
         console.log("Fetching snapshots..");
         const snapshots = await doClient.snapshots.list();
 
-        console.log(`Acquired snapshots (length: ${snapshots.length})\n Checking for and existing snapshot: ${snapshotName}..`);
+        console.log(`Acquired snapshots (length: ${snapshots.length})\n Checking for an existing snapshot: ${snapshotName}..`);
 
         for (let i = 0; i < snapshots.length; i++) {
             if (snapshots[i]["name"] == snapshotName) {
@@ -131,6 +131,19 @@ module.exports = {
         );
 
         return succeeded;
+    },
+
+    GetPublicIp(droplet){
+
+        var ipAddress;
+
+        for (var i = 0; i < droplet["networks"]["v4"].length; i++) {
+            if (droplet["networks"]["v4"][i]["type"] == "public") {
+                ipAddress = droplet["networks"]["v4"][i]["ip_address"];
+            }
+        }
+
+        return ipAddress;
     },
 
 };

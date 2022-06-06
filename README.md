@@ -19,3 +19,7 @@ Currently, the commands are only for Minecraft and Valheim.
 Prerequisites:
 - A discord bot with slash command permission scope
 - A DigitalOcean droplet with a either a Valheim or Minecraft server
+
+![image](https://user-images.githubusercontent.com/5209990/172082862-d0e14b9f-5702-40f3-b0aa-6e1e4108db18.png)
+
+![image](https://user-images.githubusercontent.com/5209990/172082926-b6f8b5b3-3206-4d13-ad94-57cb0c93063d.png)

@@ -37,6 +37,17 @@ module.exports = {
 		status = status ? controller.icons.online : controller.icons.offline;
 
 		const ipAddress = controller.GetPublicIp(droplet);
+        const domainRecords = await controller.GetDomainRecords();
+        let dRecId;
+        domainRecords.forEach(element => {
+            if(element.name == "valheim"){
+                dRecId = element.id;
+            }
+        });
+
+        if(dRecId !== 0){
+            ipAddress = 'valheim.edgex.games';
+        }
 
 		interaction.editReply(`${status_searching} ${controller.icons.success}\n${status_vpsStatus} ${status}\nIP Address: **${ipAddress}:2456**\nPassword: **${process.env.VALHEIM_SERVER_PASSWORD}**`);
 	},

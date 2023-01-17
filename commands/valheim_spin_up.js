@@ -109,6 +109,19 @@ module.exports = {
 
 			ipAddress = controller.GetPublicIp(activeDroplet);
 
+			const domainRecords = await controller.GetDomainRecords();
+			let dRecId;
+			domainRecords.forEach(element => {
+				if(element.name == "valheim"){
+					dRecId = element.id;
+				}
+			});
+
+			if(dRecId !== 0){
+				await controller.UpdateDomainRecord(dRecId, ipAddress);
+				ipAddress = 'valheim.edgex.games';
+			}
+
 			sleep(3000).then(() => {
 				interaction.editReply(`Valheim VPS spin up complete! ${controller.icons.success} Valheim server should be available soon via IP Address: **${ipAddress}:2456**\nPassword: **${process.env.VALHEIM_SERVER_PASSWORD}**`);
 				//\nFor easy connection, right-click game in Steam > Properties and add to \"Launch Options\" \`+connect ${ipAddress}:2456\`

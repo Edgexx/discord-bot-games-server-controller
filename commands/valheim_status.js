@@ -36,7 +36,7 @@ module.exports = {
 		var status = (droplet.status == 'active');
 		status = status ? controller.icons.online : controller.icons.offline;
 
-		const ipAddress = controller.GetPublicIp(droplet);
+		let ipAddress = controller.GetPublicIp(droplet);
         const domainRecords = await controller.GetDomainRecords();
         let dRecId;
         domainRecords.forEach(element => {

@@ -5,10 +5,6 @@ const doClient = digitalocean.client(process.env.DO_TOKEN);
 
 module.exports = {
 
-    testing(){
-        console.log("This is a test");
-    },
-
     async GetDroplet(dropletName){
 
 		var droplet;

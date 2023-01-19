@@ -24,11 +24,9 @@ module.exports = {
 		const status_creatingSnapshot = "Creating a snapshot of the server (~10mins)...";
 		const status_deleteDroplet = "Deleting Valheim VPS...";
 
-		interaction.deferReply({ ephemeral: true }).then(
-			function(){
-				interaction.editReply(`${status_findingVps} ${controller.icons.loading}`);
-			}
-		);
+		await interaction.deferReply({ ephemeral: true });
+
+		interaction.editReply(`${status_findingVps} ${controller.icons.loading}`);
 
 		const droplet = await controller.GetDroplet(process.env.VALHEIM_SNAPSHOT_NAME);
 

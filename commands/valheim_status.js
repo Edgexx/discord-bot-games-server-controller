@@ -19,11 +19,9 @@ module.exports = {
 		const status_searching = "Finding Valheim VPS...";
 		const status_vpsStatus = "VPS Status...";
 
-		interaction.deferReply({ ephemeral: true }).then(
-			function(){
-				interaction.editReply(`${status_searching} ${controller.icons.loading}`);
-			}
-		);
+		await interaction.deferReply({ ephemeral: true });
+
+		interaction.editReply(`${status_searching} ${controller.icons.loading}`);
 
 		const droplet = await controller.GetDroplet(process.env.VALHEIM_SNAPSHOT_NAME);
 

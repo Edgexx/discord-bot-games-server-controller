@@ -27,11 +27,9 @@ module.exports = {
 		const status_assignFloatingIp = "Attempting to assign Floating IP...";
 
 
-		interaction.deferReply({ ephemeral: true }).then(
-			function(){
-				interaction.editReply(`${status_findingVps} ${controller.icons.loading}`);
-			}
-		);
+		await interaction.deferReply({ ephemeral: true });
+
+		interaction.editReply(`${status_findingVps} ${controller.icons.loading}`);
 
 		const droplet = await controller.GetDroplet(process.env.VALHEIM_SNAPSHOT_NAME);
 

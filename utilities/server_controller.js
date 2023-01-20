@@ -151,8 +151,7 @@ module.exports = {
     async UpdateDomainRecord(recordId, ipAddress){
         const attributes = {
             "type": "A",
-            "data": ipAddress,
-            "ttl": 0,
+            "data": ipAddress
         }
         const response = await doClient.domains.updateRecord(process.env.DO_DOMAIN, recordId, attributes);
         return response;

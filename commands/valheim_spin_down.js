@@ -82,7 +82,7 @@ module.exports = {
 		const deleted = await controller.DeleteDroplet(droplet["id"]);
 
 		if (deleted){
-			interaction.editReply(`Minecraft VPS successfully shutdown. ${controller.icons.success}`);
+			interaction.editReply(`Valheim VPS successfully shutdown. ${controller.icons.success}`);
 		}
 	},
 };
